@@ -2,4 +2,13 @@ http:
   listener:
     host: "localhost"
     port: "8081"
-    path: "/getRoutes"
+    path: "/travelOnTip/{serviceType}"
+
+db:
+  psql:
+    host: "jdbc:postgresql://127.0.0.1"
+    port: "5432"
+    username: "postgres"
+    password: "12412343"
+    database: "sprint2"
+    driver: "org.postgresql.Driver" 
