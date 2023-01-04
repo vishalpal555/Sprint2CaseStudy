@@ -1,0 +1,67 @@
+#%RAML 1.0
+title: RetrieveTravelOnTip-SAPI
+description: API To retrieve Routes and Schedules from TravelOnTip System and passed to process/business API (BAPI)
+
+uses:
+  common: /libraries/common/common-library-SAPI.raml
+  routes: /libraries/routes/routesLibrary.raml
+  schedules: /libraries/schedules/schedulesLibrary.raml
+
+/{transportType}:
+  /{transportCompany}:
+    /routes:
+      get:
+        is:
+          - common.transactionId
+        responses:
+          200:
+            body:
+              application/json:
+                type: routes.getRoutes200
+                example: !include /libraries/routes/examples/getRoutes-200-example.json
+                  
+          400:
+            body:
+              application/json:
+                type: common.error400
+                example: !include /libraries/common/examples/400-example.json
+          404:
+            body:
+              application/json:
+                type: common.error404
+                example: !include /libraries/common/examples/404-example.json
+          500:
+            body:
+              application/json:
+                type: common.error500
+                example: !include /libraries/common/examples/500-example.json
+    
+    /schedules:
+      get:
+        is:
+          - common.transactionId
+          - common.departureLocationCode
+          - common.destinationLocationCode
+        responses:
+          200:
+            body:
+              application/json:
+                type: schedules.getSchedules200
+                example: !include /libraries/schedules/examples/getSchedules-200-example.json
+                  
+          400:
+            body:
+              application/json:
+                type: common.error400
+                example: !include /libraries/common/examples/400-example.json
+          404:
+            body:
+              application/json:
+                type: common.error404
+                example: !include /libraries/common/examples/404-example.json
+          500:
+            body:
+              application/json:
+                type: common.error500
+                example: !include /libraries/common/examples/500-example.json
+
