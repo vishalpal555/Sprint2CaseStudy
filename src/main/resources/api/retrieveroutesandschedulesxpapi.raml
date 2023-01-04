@@ -1,0 +1,68 @@
+#%RAML 1.0
+title: RetrieveRoutesAndSchedulesXPAPI-MobileApp
+description: This raml file will retrieve consolidated Routes and Schedules for experience api for mobile application
+
+uses:
+  common: /libraries/common/commonBusiness-library.raml
+  routes: /libraries/routes/routesLibrary.raml
+  schedules: /libraries/schedules/schedulesLibrary.raml
+/booking:
+  /{transportType}:
+    /routes:
+      get:
+        is:
+          - common.transactionId 
+          - common.companyName
+          - common.departureLocation
+          - common.destinationLocation
+        responses:
+          200:
+            body: 
+              application/json:
+                type: routes.getRoutes200
+                example: !include libraries/routes/examples/getRoutes-200-example.json
+          400:
+            body:
+              application/json:
+                type: common.error400
+                example: !include /libraries/common/example/400-example.json        
+          404:
+            body:
+              application/json:
+                type: common.error404
+                example: !include /libraries/common/example/404-example.json        
+          500:
+            body:
+              application/json:
+                type: common.error500
+                example: !include /libraries/common/example/500-example.json
+                  
+    /schedules:
+      get:
+        is:
+          - common.transactionId
+          - common.companyName
+          - common.departureLocation
+          - common.destinationLocation
+          - common.requiredTimezone
+        responses:
+          200:
+            body:
+              application/json:
+                type: schedules.getSchedules200
+                example: !include /libraries/schedules/examples/getSchedules-200-example.json
+          400:
+            body:
+              application/json:
+                type: common.error400
+                example: !include /libraries/common/example/400-example.json        
+          404:
+            body:
+              application/json:
+                type: common.error404
+                example: !include /libraries/common/example/404-example.json     
+          500:
+            body:
+              application/json:
+                type: common.error500
+                example: !include /libraries/common/example/500-example.json
