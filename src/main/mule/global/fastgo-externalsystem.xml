@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="travelontips-externalsystemFlow" doc:id="fd592b43-bdf3-4e6d-974b-ae582792ed15" >
+		<http:listener doc:name="Listener" doc:id="91ec7ba5-07d5-458e-9963-97b554ea66cb" config-ref="HTTP_Listener_config" path="${http.listener.path}">
+			<http:error-response >
+				<http:body ><![CDATA[#[output text/plain --- error.errorType]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="5f14878d-0a1b-4703-99ff-27907b581112" message="Request recieved on FastGo External System for transactionId: #[attributes.headers.transactionId]"/>
+		<choice doc:name="Choice" doc:id="38d9a002-e9a8-4cef-b448-57197a9b5237" >
+			<when expression='#[attributes.uriParams.serviceType == "routes"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="a64683c1-e9c2-45d2-ba4c-8994ae0ebaa3" message="selected routes"/>
+				<flow-ref doc:name="Flow Reference" doc:id="c6874d0f-3abe-4a4c-a74f-959b3fd68cfc" name="fastgo-getroutes-implementationFlow"/>
+			</when>
+			<when expression='#[attributes.uriParams.serviceType == "schedules"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="ef20c643-dadb-47fe-bf6c-cc179596e83f" message="selected schedules"/>
+				<flow-ref doc:name="Flow Reference" doc:id="24c03b68-1353-4721-8a23-7205ba1e9f06" name="fastgo-getschedules-implementationFlow"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="d59498f2-1482-4630-a239-7166f4dd6ef4" message="default log"/>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="173afb4c-9481-47fc-bea8-1134c5eb363a" message="Response sent from  FastGo External System for transactionId: #[attributes.headers.transactionId]"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="114a7e6c-a4fd-49a2-8d67-27e9969704b7" >
+				<logger level="INFO" doc:name="Logger" doc:id="3ac9ea32-2127-465c-b169-9d229ae350da" message="Error occured in  FastGo External System for transactionId: #[attributes.headers.transactionId] | error-type: #[error.errorType] ----&gt; reason: #[error.errorMessage]"/>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

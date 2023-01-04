@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c679adc6-2dd8-47d4-8626-f0a027ecaf12" >
+		<http:listener-connection host="${http.listener.host}" port="${http.listener.port}" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="f7bb78a9-a56b-47e3-88ff-bd36d7d62111" file="config\local.yaml" />
+	<db:config name="Postgres_Database_Config" doc:name="Database Config" doc:id="e0b589e3-1eff-4d7f-a4f9-f0bd1a79f4c0" >
+		<db:generic-connection url="${db.psql.host}:${db.psql.port}/${db.psql.database}" driverClassName="${db.psql.driver}" user="${db.psql.username}" password="${db.psql.password}" />
+	</db:config>
+	
+</mule>

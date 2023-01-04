@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="fastgo-getschedules-implementationFlow" doc:id="3c6ff0df-f083-407d-a4ba-90891b5397ca">
+	<db:select doc:name="FastGo-SelectRoutes" doc:id="21fa774b-7563-46e6-b164-15fb22513f79" config-ref="Postgres_Database_Config">
+			<db:sql ><![CDATA[SELECT * FROM schedules WHERE company_name='FastGo']]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="2fec9073-1641-43b2-a1dc-8426281d2726" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+//payload map(item) -> {
+//	(item mapObject(value, key) -> {
+//		("departureDateTime": value) if(key as String == "departure_date_time"),
+//		("departureLocationCode": value) if(key as String == "departure_location_code"),
+//		("arrivalLocationCode": value) if(key as String == "arrival_location_code"),
+//		("availableSeats": value) if(key as String == "available_seats"),
+//		("companyName": value) if(key as String == "company_name")
+//	})
+//	
+//}
+
+payload map(item) -> {
+	"departureDateTime": item.departure_date_time,
+	"departureLocationCode": item.departure_location_code,
+	"arrivalLocationCode": item.arrival_location_code,
+	"availableSeats": item.available_seats,
+	"companyName": item.company_name
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	</mule>
