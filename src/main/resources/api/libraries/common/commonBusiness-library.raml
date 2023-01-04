@@ -1,0 +1,13 @@
+#%RAML 1.0 Library
+
+types:
+  error400: !include /libraries/common/dataTypes/error400-DataType.raml
+  error404: !include /libraries/common/dataTypes/error404-DataType.raml
+  error500: !include /libraries/common/dataTypes/error500-DataType.raml
+
+traits:
+  transactionId: !include /libraries/common/traits/header-transactionId-trait.raml
+  companyName: !include /libraries/common/traits/queryParams-companyName-trait.raml
+  departureLocation: !include /libraries/common/traits/queryParam-departureLocation-trait.raml
+  destinationLocation: !include /libraries/common/traits/queryParams-destinationLocation-trait.raml
+  requiredTimezone: !include /libraries/common/traits/queryParams-requiredTimezone-trait.raml
