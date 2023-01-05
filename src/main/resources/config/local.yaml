@@ -1,0 +1,10 @@
+http:
+  listener:
+    host: "localhost"
+    port: "8083"
+    path: "/(transportType)/(transportCompany)"
+
+  requester:
+    host: "localhost"
+    port: "8081"
+    path: "/fastGo"
