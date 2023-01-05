@@ -109,6 +109,12 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.4.3</version>
 		</dependency>
+		<dependency>
+			<groupId>f37fb71b-9b6c-409a-93d8-5cbf7337207c</groupId>
+			<artifactId>mule-plugin-retrievefastgo-sapi</artifactId>
+			<version>1.0.0</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
 	</dependencies>
 
 	<repositories>

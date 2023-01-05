@@ -11,20 +11,21 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			</http:error-response>
 		</http:listener>
 		<logger level="INFO" doc:name="Logger" doc:id="5f14878d-0a1b-4703-99ff-27907b581112" message="Request recieved on TravelOnTip External System for transactionId: #[attributes.headers.transactionId]"/>
+		<set-variable value="#[attributes.headers.transactionId]" doc:name="transactionId-Variable" doc:id="5e332c09-1ad7-411c-96cf-ddf53642ef47" variableName="transactionId"/>
 		<choice doc:name="Choice" doc:id="38d9a002-e9a8-4cef-b448-57197a9b5237" >
 			<when expression='#[attributes.uriParams.serviceType == "routes"]'>
-				<logger level="INFO" doc:name="Logger" doc:id="a64683c1-e9c2-45d2-ba4c-8994ae0ebaa3" message="selected routes"/>
+				<logger level="INFO" doc:name="Logger" doc:id="a64683c1-e9c2-45d2-ba4c-8994ae0ebaa3" message="selected routes for transactionId #[attributes.headers.transactionId]"/>
 				<flow-ref doc:name="Flow Reference" doc:id="c6874d0f-3abe-4a4c-a74f-959b3fd68cfc" name="travelontip-getroutes-implementationFlow"/>
 			</when>
 			<when expression='#[attributes.uriParams.serviceType == "schedules"]'>
-				<logger level="INFO" doc:name="Logger" doc:id="ef20c643-dadb-47fe-bf6c-cc179596e83f" message="selected schedules"/>
+				<logger level="INFO" doc:name="Logger" doc:id="ef20c643-dadb-47fe-bf6c-cc179596e83f" message="selected schedules for transactionId #[attributes.headers.transactionId]"/>
 				<flow-ref doc:name="Flow Reference" doc:id="24c03b68-1353-4721-8a23-7205ba1e9f06" name="travelontrip-getschedules-implementationFlow"/>
 			</when>
 			<otherwise >
-				<logger level="INFO" doc:name="Logger" doc:id="d59498f2-1482-4630-a239-7166f4dd6ef4" message="default log"/>
+				<logger level="INFO" doc:name="Logger" doc:id="d59498f2-1482-4630-a239-7166f4dd6ef4" message="default log for transactionId #[attributes.headers.transactionId]"/>
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name="Logger" doc:id="173afb4c-9481-47fc-bea8-1134c5eb363a" message="Response sent from TravelOnTip External System for transactionId: #[attributes.headers.transactionId]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="173afb4c-9481-47fc-bea8-1134c5eb363a" message="Response sent from TravelOnTip External System for transactionId: #[vars.transactionId]"/>
 		<error-handler >
 			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="114a7e6c-a4fd-49a2-8d67-27e9969704b7" >
 				<logger level="INFO" doc:name="Logger" doc:id="3ac9ea32-2127-465c-b169-9d229ae350da" message="Error occured in TravelOnTip External System for transactionId: #[attributes.headers.transactionId] | error-type: #[error.errorType] ----&gt; reason: #[error.errorMessage]"/>
