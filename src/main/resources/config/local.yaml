@@ -1,0 +1,9 @@
+http:
+  listener:
+    host: "localhost"
+    port: "8084"
+    path: "/{transportType}/{transportCompany}"
+  requester:
+    host: "localhost"
+    port: "8082"
+    path: "/travelOnTip"
