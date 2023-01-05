@@ -6,7 +6,13 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="getSchedules-TravelOnTipSub_Flow" doc:id="7105686c-7bcd-4c20-ab70-2a16f539ac3f" >
-		<http:request method="GET" doc:name="Request" doc:id="4baf078a-eb22-4bdb-8356-f96ddb1567d2" config-ref="HTTP_Request_configuration_request_TravleOnTip" path="/schedules" />
+		<http:request method="GET" doc:name="Request" doc:id="4baf078a-eb22-4bdb-8356-f96ddb1567d2" config-ref="HTTP_Request_configuration_request_TravleOnTip" path="/schedules" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"transactionId" : attributes.headers.transactionId
+}]]]></http:headers>
+		</http:request>
 		<ee:transform doc:name="Transform Message" doc:id="598dfed5-6e0d-4eba-8b36-5a26e3eeaeae" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
