@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="getRoutesSub_Flow-FastGo" doc:id="65c41b4f-bd6b-4dcb-9a61-9db3a1e85d03" >
+		<logger level="INFO" doc:name="Logger" doc:id="15ad6f4e-75e3-4dda-aebc-68c6e8b69e1c" message="selected FastGo #[vars.transportType] #[vars.transportCompany] in sub flow for requeter for transaction id: #[vars.transactionId]" />
+		<http:request method="GET" doc:name="Request" doc:id="aafe4938-6820-42f2-aca2-9a466a7e7ff6" config-ref="HTTP_Request_configuration-FastGo" path="/{transportType}/{transportCompany}${http.requester.fastGo.routes_path}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"transactionId" : vars.transactionId
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"transportType" : vars.transportType,
+	"transportCompany": vars.transportCompany
+}]]]></http:uri-params>
+		
+</http:request>
+	</sub-flow>
+	<sub-flow name="getRoutesSub_TravelOnTip" doc:id="1d2e9f06-16ba-420d-b161-001ff39143b3" >
+		<logger level="INFO" doc:name="Logger" doc:id="32b2f3ef-8039-46d4-b62b-34a90f6838b0" message="selected TravelOnTip #[vars.transportType] #[vars.transportCompany] requester for transaction id: #[vars.transactionId]" />
+		<http:request method="GET" doc:name="Request" doc:id="f0ed56cf-f494-4e22-8284-4b6cdad0b845" config-ref="HTTP_Request_configuration-TravelOnTip" path="/{transportType}/{transportCompany}${http.requester.travelOnTip.routes_path}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"transactionId" : vars.transactionId
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"transportType" : vars.transportType,
+	"transportCompany": vars.transportCompany
+}]]]></http:uri-params>
+		
+</http:request>
+	</sub-flow>
+	<sub-flow name="getRoutesSub_Flow-choice" doc:id="c82b33cf-e839-425a-8f51-282fb9483247" >
+		<choice doc:name="Choice" doc:id="9aa429fb-e9c5-4297-9e08-9414ed14d9f8" >
+			<when expression='#[vars.transportCompany == "FastGo"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="1cc9620c-5cf8-42bf-9478-58377d99255e" message="selected FastGo #[vars.transportType] #[vars.transportCompany]"/>
+				<flow-ref doc:name="Flow Reference" doc:id="caeb7920-d392-4ecc-9f26-3d98879681d6" name="getRoutesSub_Flow-FastGo"/>
+			</when>
+			<when expression='#[vars.transportCompany == "TravelOnTip"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="a25ccb7a-cd93-4da8-8dbc-06474efa9b5f" message="selected TravelOnTip"/>
+				<flow-ref doc:name="Flow Reference" doc:id="4a5e6bc2-a47d-498d-9440-c49683a1afe4" name="getRoutesSub_TravelOnTip"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="af400cce-f59d-4c54-8b68-8e9d0a7c8289" message="selected default"/>
+			</otherwise>
+		</choice>
+	</sub-flow>
+</mule>

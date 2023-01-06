@@ -1,0 +1,19 @@
+http:
+  listener:
+    host: "localhost"
+    port: "8085"
+    path: "booking/{transportType}"    
+
+  requester:
+    fastGo:
+      host: "localhost"
+      port: "8083"
+      base_path: "/api"
+      routes_path: "/routes"
+      schedules_path: "/schedules"
+    travelOnTip:
+      host: "localhost"
+      port: "8084"
+      base_path: "/api"
+      routes_path: "/routes"
+      schedules_path: "/schedules"
