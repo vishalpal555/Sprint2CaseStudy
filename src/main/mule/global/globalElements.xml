@@ -15,4 +15,5 @@ http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/m
      <http:request-config name="HTTP_Request_configuration_request_FastGo" doc:name="HTTP Request configuration" doc:id="153b4174-42a1-40ee-b5cc-0a41278263fc" basePath="${http.requester.path}">
 		<http:request-connection host="${http.requester.host}" port="${http.requester.port}" />
 	</http:request-config>
+	<configuration doc:name="Configuration" doc:id="25202e79-1a8f-4652-833a-927443c630e1" defaultErrorHandler-ref="globalError_Handler-fastgo-sapi" />
 </mule>
