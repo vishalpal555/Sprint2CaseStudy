@@ -6,4 +6,6 @@ http:
   requester:
     host: "localhost"
     port: "8082"
-    path: "/travelOnTip"
+    base_path: "/travelOnTip"
+    routes_path: "/routes"
+    schedules_path: "/schedules"

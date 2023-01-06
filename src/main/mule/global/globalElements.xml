@@ -11,7 +11,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
     </http:listener-config>
     <apikit:config name="retrievetravelontip-sapi-config" api="retrievetravelontip-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<configuration-properties doc:name="Configuration properties" doc:id="7d7c670b-fe08-40cc-9185-293f670a91f7" file="config\local.yaml" />
-    <http:request-config name="HTTP_Request_configuration_request_TravleOnTip" doc:name="HTTP Request configuration" doc:id="f0caf901-459a-4735-9d5e-f0478d1c6b74" basePath="${http.requester.path}">
+    <http:request-config name="HTTP_Request_configuration_request_TravleOnTip" doc:name="HTTP Request configuration" doc:id="f0caf901-459a-4735-9d5e-f0478d1c6b74" basePath="${http.requester.base_path}">
 		<http:request-connection host="${http.requester.host}" port="${http.requester.port}" />
 	</http:request-config>
 	<configuration doc:name="Configuration" doc:id="0adedf0c-382c-486c-91ed-5d571449c471" defaultErrorHandler-ref="globalErrors_Handler-TravelOnTip-SAPI" />

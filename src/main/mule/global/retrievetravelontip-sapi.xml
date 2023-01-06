@@ -40,24 +40,36 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-    <flow name="get:\(transportType)\(transportCompany)\routes:retrievetravelontip-sapi-config">
-		<ee:transform>
-            <ee:variables>
-                <ee:set-variable variableName="transportType">attributes.uriParams.'transportType'</ee:set-variable>
-                <ee:set-variable variableName="transportCompany">attributes.uriParams.'transportCompany'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
+    <sub-flow name="retrievetravelontip-sapiSub_Flow-variables" doc:id="889809d5-a203-483f-bb85-8dd97aa276ad" >
+		<ee:transform doc:name="Transform Message" doc:id="49c29eb1-86b2-4467-9379-a6ce58e32fa3" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="transactionId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.transactionId]]></ee:set-variable>
+				<ee:set-variable variableName="transportType" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.transportType]]></ee:set-variable>
+				<ee:set-variable variableName="transportCompany" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.transportCompany]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<flow name="get:\(transportType)\(transportCompany)\routes:retrievetravelontip-sapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="577b46d7-4759-441b-8fef-07617d84efc9" name="retrievetravelontip-sapiSub_Flow-variables"/>
 		<logger level="INFO" doc:name="Logger" doc:id="e8aa82ef-4b30-47ef-b384-9a9805ab601c" message="In Path get:\(transportType)\(transportCompany)\routes:retrievetravelontip-sapi-config with id #[attributes.headers.transactionId]"/>
 		<flow-ref doc:name="Flow Reference" doc:id="68b79f10-b45a-40ad-a355-fffd9bae179b" name="getRoutes-TravelOnTipSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="4e13f783-f93b-44f4-b1c3-2bd69ab2e8c1" message="In response from get:\(transportType)\(transportCompany)\routes:retrievetravelontip-sapi-config with id #[vars.transactionId]"/>
     </flow>
     <flow name="get:\(transportType)\(transportCompany)\schedules:retrievetravelontip-sapi-config">
-		<ee:transform>
-            <ee:variables>
-                <ee:set-variable variableName="transportType">attributes.uriParams.'transportType'</ee:set-variable>
-                <ee:set-variable variableName="transportCompany">attributes.uriParams.'transportCompany'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="0ff132f4-74bd-4958-9400-75da371ded83" name="retrievetravelontip-sapiSub_Flow-variables"/>
 		<logger level="INFO" doc:name="Logger" doc:id="2223c6c5-9da1-4f51-8042-22de1f239bfe" message="In Path get:\(transportType)\(transportCompany)\schedules:retrievetravelontip-sapi-config with id #[attributes.headers.transactionId]"/>
 		<flow-ref doc:name="Flow Reference" doc:id="6328e54d-9cc8-4e4a-a939-806f9b685ca3" name="getSchedules-TravelOnTipSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e75ca4a9-89fc-499e-b52d-8c96e89caba9" message="In response from get:\(transportType)\(transportCompany)\schedules:retrievetravelontip-sapi-config with id #[vars.transactionId]"/>
     </flow>
 </mule>
