@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/m
     </http:listener-config>
     <apikit:config name="retrievefastgo-sapi-config" api="retrievefastgo-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<configuration-properties doc:name="Configuration properties" doc:id="e4ee735d-47e0-4bf0-9748-6ee057765481" file="config\local.yaml" />
-     <http:request-config name="HTTP_Request_configuration_request_FastGo" doc:name="HTTP Request configuration" doc:id="153b4174-42a1-40ee-b5cc-0a41278263fc" basePath="${http.requester.path}">
+     <http:request-config name="HTTP_Request_configuration_request_FastGo" doc:name="HTTP Request configuration" doc:id="153b4174-42a1-40ee-b5cc-0a41278263fc" basePath="${http.requester.base_path}">
 		<http:request-connection host="${http.requester.host}" port="${http.requester.port}" />
 	</http:request-config>
 	<configuration doc:name="Configuration" doc:id="25202e79-1a8f-4652-833a-927443c630e1" defaultErrorHandler-ref="globalError_Handler-fastgo-sapi" />

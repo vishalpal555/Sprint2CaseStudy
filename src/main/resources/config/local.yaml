@@ -7,4 +7,6 @@ http:
   requester:
     host: "localhost"
     port: "8081"
-    path: "/fastGo"
+    base_path: "/fastGo"
+    routes_path: "/routes"
+    schedules_path: "/schedules"

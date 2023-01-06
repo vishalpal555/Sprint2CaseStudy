@@ -41,24 +41,28 @@ output application/json
             
         </error-handler>
     </flow>
-    <flow name="get:\(transportType)\(transportCompany)\routes:retrievefastgo-sapi-config">
+    <sub-flow name="retrievefastgo-sapiSub_Flow-variables" doc:id="b94d4b22-ded0-40da-b021-1c3496d33aaa" >
 		<ee:transform>
             <ee:variables>
-                <ee:set-variable variableName="transportType">attributes.uriParams.'transportType'</ee:set-variable>
-                <ee:set-variable variableName="transportCompany">attributes.uriParams.'transportCompany'</ee:set-variable>
+                <ee:set-variable variableName="transportType"><![CDATA[attributes.uriParams.'transportType']]></ee:set-variable>
+                <ee:set-variable variableName="transportCompany"><![CDATA[attributes.uriParams.'transportCompany']]></ee:set-variable>
+				<ee:set-variable variableName="transactionId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.transactionId]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="522ecbc6-6414-461e-892b-6bf6eb18814a" message="In Path get:\(transportType)\(transportCompany)\routes:fastgo-sapi-config with id #[attributes.headers.transactionId]"/>
+	</sub-flow>
+	<flow name="get:\(transportType)\(transportCompany)\routes:retrievefastgo-sapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="09dd123a-3144-451f-855f-1ed3df4a577e" name="retrievefastgo-sapiSub_Flow-variables"/>
+		<logger level="INFO" doc:name="Logger" doc:id="522ecbc6-6414-461e-892b-6bf6eb18814a" message="In Path get:\(transportType)\(transportCompany)\routes:fastgo-sapi-config with id #[vars.transactionId]"/>
 		<flow-ref doc:name="Flow Reference" doc:id="77c14a16-5ead-4125-a5e2-9d58b75e35e0" name="getRoutes-FastGoSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ff406c5c-eb3d-4c4c-9721-a187385bf219" message="from response get:\(transportType)\(transportCompany)\routes:fastgo-sapi-config with id #[vars.transactionId]"/>
     </flow>
     <flow name="get:\(transportType)\(transportCompany)\schedules:retrievefastgo-sapi-config">
-		<ee:transform>
-            <ee:variables>
-                <ee:set-variable variableName="transportType">attributes.uriParams.'transportType'</ee:set-variable>
-                <ee:set-variable variableName="transportCompany">attributes.uriParams.'transportCompany'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="a347fa2d-2b96-440f-b1d2-1b7989e73bec" message="In Path get:\(transportType)\(transportCompany)\schedules:fastgo-sapi-config with id #[attributes.headers.transactionId]"/>
+		<flow-ref doc:name="Flow Reference1" doc:id="1eda214d-003a-46f2-bd4f-5b309d6afe34" name="retrievefastgo-sapiSub_Flow-variables" />
+		<logger level="INFO" doc:name="Logger" doc:id="a347fa2d-2b96-440f-b1d2-1b7989e73bec" message="In Path get:\(transportType)\(transportCompany)\schedules:fastgo-sapi-config with id #[vars.headers.transactionId]"/>
 		<flow-ref doc:name="Flow Reference" doc:id="dcbb2e48-46ed-49da-a442-b90fb5d6579e" name="getSchedules-FastGoSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="a6d41829-77a1-4937-868e-6d02b342727b" message="from responseget:\(transportType)\(transportCompany)\schedules:fastgo-sapi-config with id #[vars.transactionId]"/>
     </flow>
 </mule>

@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="getSchedules-FastGoSub_Flow" doc:id="7105686c-7bcd-4c20-ab70-2a16f539ac3f" >
-		<http:request method="GET" doc:name="Request" doc:id="4baf078a-eb22-4bdb-8356-f96ddb1567d2" config-ref="HTTP_Request_configuration_request_FastGo" path="/schedules" >
+		<http:request method="GET" doc:name="Request" doc:id="4baf078a-eb22-4bdb-8356-f96ddb1567d2" config-ref="HTTP_Request_configuration_request_FastGo" path="${http.requester.schedules_path}" >
 			<http:headers ><![CDATA[#[output application/java
 ---
 {

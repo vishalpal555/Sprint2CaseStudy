@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="getRoutes-FastGoSub_Flow" doc:id="969237d2-9ef9-4ecb-b6c7-31d64a7f1cfb" >
-		<http:request method="GET" doc:name="RequestRoutes" doc:id="60ff870d-383d-4911-b7ff-9334511060a7" config-ref="HTTP_Request_configuration_request_FastGo" path="/routes" >
+		<http:request method="GET" doc:name="RequestRoutes" doc:id="60ff870d-383d-4911-b7ff-9334511060a7" config-ref="HTTP_Request_configuration_request_FastGo" path="${http.requester.routes_path}">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
