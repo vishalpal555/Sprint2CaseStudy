@@ -24,11 +24,12 @@ payload map(item) -> {
     "travelRoute": {
       "destinationLocation": {
         "locationCode": item."arrivalLocationCode"
-      }
-    },
-    "originLocation": {
+      },
+      "originLocation": {
       "locationCode": item."departureLocationCode"
+    	}
     }
+    
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
