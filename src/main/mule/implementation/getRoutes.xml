@@ -7,13 +7,14 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<sub-flow name="getRoutesSub_Flow-FastGo" doc:id="65c41b4f-bd6b-4dcb-9a61-9db3a1e85d03" >
 		<logger level="INFO" doc:name="Logger" doc:id="15ad6f4e-75e3-4dda-aebc-68c6e8b69e1c" message="selected FastGo #[vars.transportType] #[vars.transportCompany] in sub flow for requeter for transaction id: #[vars.transactionId]" />
-		<http:request method="GET" doc:name="Request" doc:id="aafe4938-6820-42f2-aca2-9a466a7e7ff6" config-ref="HTTP_Request_configuration-FastGo" path="/{transportType}/{transportCompany}${http.requester.fastGo.routes_path}">
-			<http:headers ><![CDATA[#[output application/java
+		<ee:cache doc:name="Cache-FastGo" doc:id="d3962ab4-aeb9-40b1-a130-34725308fbf7" cachingStrategy-ref="Caching_Strategy">
+			<http:request method="GET" doc:name="Request" doc:id="aafe4938-6820-42f2-aca2-9a466a7e7ff6" config-ref="HTTP_Request_configuration-FastGo" path="/{transportType}/{transportCompany}${http.requester.fastGo.routes_path}">
+			<http:headers><![CDATA[#[output application/java
 ---
 {
 	"transactionId" : vars.transactionId
 }]]]></http:headers>
-			<http:uri-params ><![CDATA[#[output application/java
+			<http:uri-params><![CDATA[#[output application/java
 ---
 {
 	"transportType" : vars.transportType,
@@ -21,16 +22,38 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 }]]]></http:uri-params>
 		
 </http:request>
+			<ee:transform doc:name="Transform Message" doc:id="df0c1bec-50be-493b-8b80-eca9e4e3e6c0">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var codeDescMapper = readUrl("classpath://locationCodeDescMapper.json", "application/json")
+---
+payload map(value) -> {
+    "companyCode": "FastGo",
+    "originLocation": {
+      "locationCode": value.originLocation.locationCode,
+      "locationDesc": (codeDescMapper filter($.locationCode == value.originLocation.locationCode))[0].locationDesc
+    },
+    "destinationLocation": {
+      "locationCode": value.destinationLocation.locationCode,
+      "locationDesc": (codeDescMapper filter($.locationCode == value.destinationLocation.locationCode))[0].locationDesc
+    }
+    
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		</ee:cache>
 	</sub-flow>
 	<sub-flow name="getRoutesSub_TravelOnTip" doc:id="1d2e9f06-16ba-420d-b161-001ff39143b3" >
 		<logger level="INFO" doc:name="Logger" doc:id="32b2f3ef-8039-46d4-b62b-34a90f6838b0" message="selected TravelOnTip #[vars.transportType] #[vars.transportCompany] requester for transaction id: #[vars.transactionId]" />
-		<http:request method="GET" doc:name="Request" doc:id="f0ed56cf-f494-4e22-8284-4b6cdad0b845" config-ref="HTTP_Request_configuration-TravelOnTip" path="/{transportType}/{transportCompany}${http.requester.travelOnTip.routes_path}">
-			<http:headers ><![CDATA[#[output application/java
+		<ee:cache doc:name="Cache-TravelOnTip" doc:id="59710682-51c5-4133-a815-acdf522d03d1" cachingStrategy-ref="Caching_Strategy">
+			<http:request method="GET" doc:name="Request" doc:id="f0ed56cf-f494-4e22-8284-4b6cdad0b845" config-ref="HTTP_Request_configuration-TravelOnTip" path="/{transportType}/{transportCompany}${http.requester.travelOnTip.routes_path}">
+			<http:headers><![CDATA[#[output application/java
 ---
 {
 	"transactionId" : vars.transactionId
 }]]]></http:headers>
-			<http:uri-params ><![CDATA[#[output application/java
+			<http:uri-params><![CDATA[#[output application/java
 ---
 {
 	"transportType" : vars.transportType,
@@ -38,8 +61,30 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 }]]]></http:uri-params>
 		
 </http:request>
+			<ee:transform doc:name="Transform Message" doc:id="4723e8b9-cc3e-40e0-9f6f-f120e992e6da">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var codeDescMapper = readUrl("classpath://locationCodeDescMapper.json", "application/json")
+---
+payload map(value) -> {
+    "companyCode": "TravelOnTip",
+    "originLocation": {
+      "locationCode": value.originLocation.locationCode,
+      "locationDesc": (codeDescMapper filter($.locationCode == value.originLocation.locationCode))[0].locationDesc
+    },
+    "destinationLocation": {
+      "locationCode": value.destinationLocation.locationCode,
+      "locationDesc": (codeDescMapper filter($.locationCode == value.destinationLocation.locationCode))[0].locationDesc
+    }
+    
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		</ee:cache>
 	</sub-flow>
 	<sub-flow name="getRoutesSub_Flow-choice" doc:id="c82b33cf-e839-425a-8f51-282fb9483247" >
+		<set-variable value="Routes" doc:name="path-Variable" doc:id="b16e3e23-4b23-4aa7-a354-8dc7601e40e7" variableName="path"/>
 		<choice doc:name="Choice" doc:id="9aa429fb-e9c5-4297-9e08-9414ed14d9f8" >
 			<when expression='#[vars.transportCompany == "FastGo"]'>
 				<logger level="INFO" doc:name="Logger" doc:id="1cc9620c-5cf8-42bf-9478-58377d99255e" message="selected FastGo #[vars.transportType] #[vars.transportCompany]"/>
@@ -50,7 +95,24 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				<flow-ref doc:name="Flow Reference" doc:id="4a5e6bc2-a47d-498d-9440-c49683a1afe4" name="getRoutesSub_TravelOnTip"/>
 			</when>
 			<otherwise >
-				<logger level="INFO" doc:name="Logger" doc:id="af400cce-f59d-4c54-8b68-8e9d0a7c8289" message="selected default"/>
+				<scatter-gather doc:name="Scatter-Gather" doc:id="4ff74a4c-9150-43d5-a67d-497fa5dcd1f8" >
+					<route >
+						<set-variable value='FastGo' doc:name="FastGo-Variable" doc:id="be190454-5e2b-494c-82af-75885baf9599" variableName="transportCompany"/>
+						<flow-ref doc:name="Flow Reference" doc:id="90b43161-b9b8-453c-b6c8-bbdf90d14b64" name="getRoutesSub_Flow-FastGo"/>
+					</route>
+					<route >
+						<set-variable value='TravelOnTip' doc:name="TravelOnTip-Variable" doc:id="9decb205-7f4a-4514-a8ac-7a17048771a3" variableName="transportCompany"/>
+						<flow-ref doc:name="Flow Reference" doc:id="7842f462-87d0-48ba-ba94-38d6e7efaee3" name="getRoutesSub_TravelOnTip"/>
+					</route>
+				</scatter-gather>
+				<ee:transform doc:name="Transform Message" doc:id="88bec7c2-8b4e-4b75-93d1-67262056f65d" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.'0'.payload ++ payload.'1'.payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</otherwise>
 		</choice>
 	</sub-flow>
