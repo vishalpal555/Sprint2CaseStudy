@@ -23,11 +23,12 @@ payload map(item) -> {
     "departureDateTime": item."departureDateTime",
     "travelRoute": {
       "destinationLocation": {
-        "locationCode": item."arrivalLocationCode"
-      }
-    },
-    "originLocation": {
+       "locationCode": item."arrivalLocationCode"
+      },
+      "originLocation": {
       "locationCode": item."departureLocationCode"
+      }
+    
     }
 }]]></ee:set-payload>
 			</ee:message>
