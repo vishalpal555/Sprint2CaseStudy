@@ -1,0 +1,10 @@
+http:
+  listener:
+    host: "localhost"
+    port: "8086"
+    path: "/booking/{transportType}"    
+
+  requester:
+    host: "localhost"
+    port: "8085"
+    base_path: "/api/booking"

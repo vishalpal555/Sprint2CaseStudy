@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	
+	<sub-flow name="routesSub_Flow" doc:id="694eb6f9-f9ce-4899-be07-9acb1f718131" >
+		<logger level="INFO" doc:name="Logger" doc:id="393924b4-ddaa-4da8-a59d-65525fffd539" message="getting routes xp-api for transactionId #[vars.transactionId] for company : #[vars.companyName]"/>
+		<http:request method="GET" doc:name="Request" doc:id="7e85498e-f47e-4e83-b345-df7afbbde0af" path="/{transportType}/routes" config-ref="HTTP_Request_configuration">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"transactionId" : vars.transactionId
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"transportType" : vars.transportType
+}]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"companyName" : vars.companyName,
+	"departureLocation": vars.departureLocation,
+	"destinationLocation": vars.destinationLocation
+}]]]></http:query-params>
+		</http:request>
+	</sub-flow>
+</mule>
