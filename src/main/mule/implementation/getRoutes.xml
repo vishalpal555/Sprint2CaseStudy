@@ -59,6 +59,12 @@ payload map(value) -> {
 	"transportType" : vars.transportType,
 	"transportCompany": vars.transportCompany
 }]]]></http:uri-params>
+				<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"departureLocationCode" : vars.departureLocation,
+	"destinationLocationCode" : vars.destinationLocation
+}]]]></http:query-params>
 		
 </http:request>
 			<ee:transform doc:name="Transform Message" doc:id="4723e8b9-cc3e-40e0-9f6f-f120e992e6da">

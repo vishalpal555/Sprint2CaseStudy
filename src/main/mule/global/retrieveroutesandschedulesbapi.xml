@@ -44,14 +44,20 @@ output application/json
 		<ee:transform doc:id="c8b1117a-ae5b-4630-824d-a740503bcb32">
             <ee:message />
 			<ee:variables>
-				<ee:set-variable variableName="transportCompany" ><![CDATA[attributes.queryParams.companyName]]></ee:set-variable>
+				<ee:set-variable variableName="transportCompany" ><![CDATA[attributes.queryParams.companyName  default "no input"]]></ee:set-variable>
 				<ee:set-variable variableName="transactionId" ><![CDATA[attributes.headers.transactionId]]></ee:set-variable>
-				<ee:set-variable variableName="departureLoacation" ><![CDATA[attributes.queryParams.departureLoacation]]></ee:set-variable>
-				<ee:set-variable variableName="destinationLoacation" ><![CDATA[attributes.queryParams.destinationLocation]]></ee:set-variable>
 				<ee:set-variable variableName="transportType" ><![CDATA[%dw 2.0
 output application/java
 ---
-attributes.uriParams.transportType]]></ee:set-variable>
+attributes.uriParams.transportType default "no input"]]></ee:set-variable>
+				<ee:set-variable variableName="departureLocation" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.departureLocation  default "no input"]]></ee:set-variable>
+				<ee:set-variable variableName="destinationLocation" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.destinationLocation  default "no input"]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
 	</sub-flow>
