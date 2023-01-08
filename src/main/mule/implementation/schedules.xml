@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="schedulesSub_Flow" doc:id="67418aa4-bed8-4baa-acf3-ec5d3fb027e6" >
+		<logger level="INFO" doc:name="Logger" doc:id="f2097d41-e798-48f9-8e79-15c34d2b465f" message="getting schedules xp-api for transactionId #[vars.transactionId] for company : #[vars.companyName]"/>
+		<http:request method="GET" doc:name="Request" doc:id="dc477b39-f090-4c66-b8e2-2d7a361fb911" path="/{transportType}/schedules" config-ref="HTTP_Request_configuration">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"transactionId" : vars.transactionId
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"transportType" : vars.transportType
+}]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"companyName" : vars.companyName,
+	"departureLocationCode": vars.departureLocation,
+	"destinationLocationCode": vars.destinationLocation,
+	"requestTimezone": vars.requestTimezone
+}]]]></http:query-params>
+		</http:request>
+	</sub-flow>
+</mule>
